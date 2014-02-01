@@ -85,7 +85,14 @@ class Trivia(object):
             self.current += 6
             if self.current >= self.total:
                 self.current = 0
-
+    def handle_input(self,number):
+        if not self.scored and not self.failed:
+            if number == self.correct:
+                self.scored = True
+                self.score += 1
+            else:
+                self.failed = True
+                self.wronganswer = number
 
 #Loading Trivia
 trivia = Trivia("1.txt")
@@ -106,6 +113,8 @@ while True:
                 trivia.handle_input(3)
             elif event.key == pygame.K_4:
                 trivia.handle_input(4)
+            elif event.key == pygame.K_RETURN:
+                trivia.next_question()
 
     #clear
     screen.fill((0,0,200))
