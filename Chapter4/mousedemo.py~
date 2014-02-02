@@ -48,7 +48,7 @@ while True:
 
     ptxt(font1, 0, 160, "Mouse Polling")
 
-    x,y = pygame.mouse,get_pos()
+    x,y = pygame.mouse.get_pos()
 
     ptxt(font1, 0, 180, "Mouse position: " + str(x) + "," + str(y))
 
