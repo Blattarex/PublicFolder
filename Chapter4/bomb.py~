@@ -62,7 +62,7 @@ while True:
         ptext(font1,100,200, "<CLICK TO PLAY>")
     else:
         if bombex:
-            if width >= 0:
+            if width > 1:
                 pygame.draw.circle(screen, white, expos, radius, width)
                 radius += 10
                 width -= 1
