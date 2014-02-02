@@ -53,7 +53,7 @@ class Trivia(object):
         self.correct = int(self.data[self.current+5])
 
         #display question
-        question = self.current #6 + 1
+        question = self.current / 6 + 1
         print_text(font1, 5, 80, "QUESTION" + str(question))
         print_text(font2, 20, 120, self.data[self.current], yellow)
 
@@ -84,7 +84,7 @@ class Trivia(object):
             self.colors = [white, white, white, white]
             self.current += 6
             if self.current >= self.total:
-                self.current = 0
+                self.endround()
     def handle_input(self,number):
         if not self.scored and not self.failed:
             if number == self.correct:
@@ -93,6 +93,12 @@ class Trivia(object):
             else:
                 self.failed = True
                 self.wronganswer = number
+
+    def endround(self):
+        print_text(font1, 5, 170, "End of this round;")
+        print_text(font2, 20, 210, "Play again? (Return)")
+        print_text(font2, 20, 240, "Or Exit? (ESC)")
+        self.current = 0
 
 #Loading Trivia
 trivia = Trivia("1.txt")
