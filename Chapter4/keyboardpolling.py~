@@ -56,7 +56,7 @@ while True:
     screen.fill((0,100,0))
 
     print_text(font1, 0, 0, "Let's see how fast you can type!")
-    print_Text(font1, 0, 20, "Try to keep up for 10 seconds...")
+    print_text(font1, 0, 20, "Try to keep up for 10 seconds...")
 
     if keyflag:
         print_text(font1,500,0,"<key>")
