@@ -1,0 +1,24 @@
+#Circle Demo program involving the clock thing
+
+import sys, pygame, time, math
+from pygame.locals import *
+
+def ptext(font, x, y, text, color=(255,255,255)):
+    imgText = font.render(text, True, color)
+    screen.blit(imgText, (x,y))
+#Variables
+center = 0,0
+radius = 200
+hours = time.clock.hour()
+minutes = time.clock.minute()
+seconds = time.clock.second()
+white = 255,255,255
+red = 255,0,0
+
+#Draw Circle
+
+#Draw Arms
+
+#Draw Hours
+
+#General End stuff -- screen update
