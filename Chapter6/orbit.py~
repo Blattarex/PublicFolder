@@ -1,7 +1,7 @@
-import random, sys, math, pygame 
-from pygame.locals import *
+import sys, random, math, pygame
+from pygame.locals import*
 
-#PointClass Declaration
+#Point Class Def
 class Point(object):
     def __init__(self, x, y):
         self.__x = x
@@ -27,46 +27,35 @@ class Point(object):
 
 #Helper Functions
 def wrap_angle(angle):
-    return angle % 360
+    if angle <= 0:
+        angle = 360
+        return angle
+    else:
+        return angle % 360
 
 def print_text(font, x, y, text, color=(255,255,255)):
     imgText = font.render(text, True, color)
     screen.blit(imgText,(x,y))
 
-#Window Initializations
+#Main program
 pygame.init()
 screen = pygame.display.set_mode((800,600))
 pygame.display.set_caption("Orbit Demo")
+font = pygame.font.Font(None, 18)
 
-#Loading Bitmaps
-space = pygame.image.load("space.png").convert()
+#Bitmap loading
+space = pygame.image.load("space.png").convert_alpha()
 planet = pygame.image.load("planet2.png").convert_alpha()
 ship = pygame.image.load("freelance.png").convert_alpha()
+width, height = ship.get_size()
+ship = pygame.transform.smoothscale(ship, (width//2, height//2))
 
-    #Planet Dimensions Get
-pw,ph = planet.get_size()
-    #Screen Dimensions Get and Center Get
-sw,sh = screen.get_size()
-centw = sw/2
-centh = sh/2
-    #Ship Dimensions Get
-shipw,shiph = ship.get_size()
-
-    #Transform Ship Dimensions
-#ship = pygame.transform.scale(ship, (shipw//2, shiph//2))
-ship = pygame.transform.smoothscale(ship, (shipw//2, shiph//2))
-
-#Point Class Initializations
+radius = 250
+angle = 0.0
 pos = Point(0,0)
 old_pos = Point(0,0)
 
-#Other initializations
-angle = 0.0
-radius = 250
-speed = 0.1
-font = pygame.font.Font(None, 15)
-
-#Main Loop
+#Game loop
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -75,34 +64,38 @@ while True:
     if keys[K_ESCAPE]:
         sys.exit()
 
-    if keys[K_UP]:
-        speed += .1
-    if keys[K_DOWN]:
-        speed -= .1
+    #Draw BG
+    screen.blit(space, (0,0))
 
-    #Variable Declarations
+    #Draw Planet
+    width, height = planet.get_size()
+    screen.blit(planet, (400-width/2, 300-height/2))
+
+    #Move Ship
+    angle = wrap_angle(angle - 0.1)
     pos.x = math.sin( math.radians(angle) ) * radius
     pos.y = math.cos( math.radians(angle) ) * radius
+
+    #Rotate Ship
     dx = (pos.x - old_pos.x)
     dy = (pos.y - old_pos.y)
     rangle = math.atan2(dy, dx)
-    rangled = wrap_angle( -math.degrees(rangle) )
+    rangled = wrap_angle( -math.degrees(rangle))
     scratch_ship = pygame.transform.rotate(ship, rangled)
 
-    #calculations
-    angle = wrap_angle(angle - speed)
-    wid,hei = scratch_ship.get_size()
-    x = centw + pos.x - wid//2
-    y = centh + pos.y - hei//2
-
-    #Drawing Objects
-    screen.blit(space,(0,0))
-    screen.blit(planet,(centw-(pw/2), centh-(ph/2)))
+    #draw ship
+    width, height = scratch_ship.get_size()
+    x = 400 + pos.x - width//2
+    y = 300 + pos.y - height//2
     screen.blit(scratch_ship, (x,y))
-    print_text(font, 0, 0, str(pos))
 
-    #Post calculation memory writes
-    old_pos.x = pos.x
-    old_pos.y = pos.y
+    print_text(font, 0,0, "Orbit: " + "(:.0f)".format(angle))
+    print_text(font, 0, 20, "Rotation: " + "(:.2f)".format(rangle))
+    print_text(font, 0, 40, "Position: " + str(pos))
+    print_text(font, 0, 60, "Old Pos: " + str(old_pos))
 
     pygame.display.update()
+
+    #position write
+    old_pos.x = pos.x
+    old_pos.y = pos.y
