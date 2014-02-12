@@ -94,7 +94,7 @@ group.add(dragon)
 
 #Player Sprite
 player = mySprite(screen)
-player.load("caveman.png", 35, 65, 8)
+player.load("caveman.png", 50, 65, 8)
 player.first_frame = 1
 player.last_frame = 7
 player.position = 400, 303
@@ -115,14 +115,20 @@ jump_vel = 0.0
 player_start_y = player.Y
 successful_jumps = 0
 double_jump = False
+keyflag = False
 
 #Game Loop
 while True:
     framerate.tick(30)
     ticks = pygame.time.get_ticks()
 
+    #Keyboard Events so you don't have to hit it for something
+    #like a millisecond
+
     for event in pygame.event.get():
         if event.type == QUIT: sys.exit()
+        elif event.type == KEYDOWN: keyflag = True
+        elif event.type == KEYUP: keyflag = False
     key = pygame.key.get_pressed()
     if key[K_ESCAPE]:
         sys.exit()
@@ -130,7 +136,7 @@ while True:
         if not player_jumping:
             player_jumping = True
             jump_vel = -8.0
-        elif not double_jump:
+        elif keyflag and not double_jump:
             jump_vel = -8.0
             double_jump = True
 
