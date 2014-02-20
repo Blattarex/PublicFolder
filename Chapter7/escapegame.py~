@@ -94,7 +94,7 @@ group.add(dragon)
 
 #Player Sprite
 player = mySprite(screen)
-player.load("caveman.png", 35, 65, 8)
+player.load("caveman.png", 50, 65, 8)
 player.first_frame = 1
 player.last_frame = 7
 player.position = 400, 303
@@ -113,6 +113,8 @@ you_win = False
 player_jumping = False
 jump_vel = 0.0
 player_start_y = player.Y
+successful_jumps = 0
+double_jump = False
 
 #Game Loop
 while True:
@@ -128,6 +130,9 @@ while True:
         if not player_jumping:
             player_jumping = True
             jump_vel = -8.0
+        elif not double_jump:
+            jump_vel = -8.0
+            double_jump = True
 
     #update arrow
     if not game_over:
@@ -143,6 +148,7 @@ while True:
     if pygame.sprite.collide_rect(arrow, dragon):
         reset_arrow()
         dragon.X -=10
+        successful_jumps += 1
 
     #check if player collides with dragon
     if pygame.sprite.collide_rect(player, dragon):
@@ -161,6 +167,7 @@ while True:
             player_jumping = False
             player.Y = player_start_y
             jump_vel = 0.0
+            double_jump = False
 
     #draw bg
     screen.blit(bg, (0,0))
@@ -173,6 +180,7 @@ while True:
     group.draw(screen)
 
     #messaging
+    print_text(font, 0, 0, "Successful Jumps: " + str(successful_jumps))
     print_text(font, 350, 560, "Press Space to Jump!")
     if game_over:
         print_text(font, 360, 100, "G A M E - O V E R")
